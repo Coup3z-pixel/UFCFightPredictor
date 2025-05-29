@@ -28,7 +28,7 @@ def get_details_of_fight(html):
     time = get_stat_by_xpath(html,'/html/body/section/div/div/div[2]/div[2]/p[1]/i[3]')
     time_format = get_stat_by_xpath(html,'/html/body/section/div/div/div[2]/div[2]/p[1]/i[4]')
 
-    r_sig_str = split_by_of(html.xpath('/html/body/section/div/div/section[2]/table/tbody/tr/td[3]/p[1]')[0].text), # sig. str of sig. str
+    r_sig_str = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[3]/p[1]') # sig. str of sig. str
     r_suc_td_of_total = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[5]/p[1]') # suc td o
     r_sub_att = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[6]/p[1]') 
     r_rev = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[7]/p[1]')
