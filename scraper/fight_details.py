@@ -91,6 +91,7 @@ def fight_detail():
         "time_format": [],
         "referee": [],
         "r_fighter": [],
+        "b_fighter": [],
         "r_kd": [],
         "r_Sig. str": [],
         "r_Sig. str. %": [],
