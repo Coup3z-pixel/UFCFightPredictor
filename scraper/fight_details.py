@@ -1,4 +1,5 @@
 import pandas as pd
+from pandas._config import display
 import requests
 from lxml import etree
 from data_clean_utils import clean_stat, split_by_of, trim_newline_stat, page_data_refining
@@ -22,29 +23,30 @@ def get_details_of_fight(html):
     rounds = int(get_stat_by_xpath(html,'/html/body/section/div/div/div[2]/div[2]/p[1]/i[2]'))
     time = get_stat_by_xpath(html,'/html/body/section/div/div/div[2]/div[2]/p[1]/i[3]')
     time_format = get_stat_by_xpath(html,'/html/body/section/div/div/div[2]/div[2]/p[1]/i[4]')
-
-    
-    r_fighter = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[1]/p[1]/a')
-    b_fighter = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[1]/p[2]/a')
     r_win = trim_newline_stat(html.xpath('/html/body/section/div/div/div[1]/div[1]/i')[0].text)
     b_win = trim_newline_stat(html.xpath('/html/body/section/div/div/div[1]/div[2]/i')[0].text)
 
+    r_fighter = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[1]/p[1]/a')
+    r_kd = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[2]/p[1]')
     r_sig_str = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[3]/p[1]') # sig. str of sig. str
-    r_suc_td_of_total = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[5]/p[1]') # suc td o
-    r_sub_att = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[6]/p[1]') 
-    r_rev = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[7]/p[1]')
-    r_ctrl = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[8]/p[1]')
+    r_total_str = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[5]/p[1]') # suc td o
+    r_td = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[6]/p[1]') # suc td o
+    r_sub_att = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[8]/p[1]') 
+    r_rev = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[9]/p[1]')
+    r_ctrl = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[10]/p[1]')
 
+    b_fighter = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[1]/p[2]/a')
+    b_kd = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[2]/p[2]')
     b_sig_str = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[3]/p[2]') # sig. str of s
-    b_suc_td_of_total = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[5]/p[2]') # suc td of total td
-    b_sub_att = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[6]/p[2]') # sub att
-    b_rev = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[7]/p[2]') # rev
-    b_ctrl = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[8]/p[2]') # ctrl
+    b_total_str = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[5]/p[2]') # suc td of total td
+    b_td = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[6]/p[2]') # suc td o
+    b_sub_att = get_stat_by_xpath(html, '/html/body/section/div/div/section[2]/table/tbody/tr/td[8]/p[2]') # sub att
+    b_rev = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[9]/p[2]') # rev
+    b_ctrl = get_stat_by_xpath(html,'/html/body/section/div/div/section[2]/table/tbody/tr/td[10]/p[2]') # ctrl
 
     r_head = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[4]/p[1]')
     r_body = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[5]/p[1]')
     r_leg = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[6]/p[1]')
-
     r_distance = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[7]/p[1]')
     r_clinch = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[8]/p[1]')
     r_ground = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[9]/p[1]')
@@ -52,7 +54,6 @@ def get_details_of_fight(html):
     b_head = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[4]/p[2]')
     b_body = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[5]/p[2]')
     b_leg = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[6]/p[2]')
-
     b_distance = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[7]/p[2]')
     b_clinch = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[8]/p[2]')
     b_ground = get_stat_by_xpath(html,'/html/body/section/div/div/table/tbody/tr/td[9]/p[2]')
@@ -62,26 +63,30 @@ def get_details_of_fight(html):
         rounds,
         time,
         time_format,
-        r_fighter,
-        b_fighter,
         r_win,
         b_win,
+        r_fighter,
+        r_kd,
         r_sig_str,
-        r_suc_td_of_total,
+        r_total_str,
+        r_td,
         r_sub_att,
         r_rev,
         r_ctrl,
-        b_sig_str[0],
-        b_suc_td_of_total,
-        b_sub_att,
-        b_rev,
-        b_ctrl,
         r_head,
         r_body,
         r_leg,
         r_distance,
         r_clinch,
         r_ground,
+        b_fighter,
+        b_kd,
+        b_sig_str,
+        b_total_str,
+        b_td,
+        b_sub_att,
+        b_rev,
+        b_ctrl,
         b_head,
         b_body,
         b_leg,
@@ -97,26 +102,30 @@ def fight_detail():
         "rounds": [],
         "time": [],
         "time_format": [],
-        "r_fighter": [],
-        "b_fighter": [],
         "r_win": [],
         "b_win": [],
+        "r_fighter": [],
+        "r_kd": [],
         "r_sig_str": [],
-        "r_suc_td_of_total": [],
+        "r_total_str": [],
+        "r_td": [],
         "r_sub_att": [],
         "r_rev": [],
         "r_ctrl": [],
-        "b_sig_str": [],
-        "b_suc_td_of_total": [],
-        "b_sub_att": [],
-        "b_rev": [],
-        "b_ctrl": [],
         "r_head": [],
         "r_body": [],
         "r_leg": [],
         "r_distance": [],
         "r_clinch": [],
         "r_ground": [],
+        "b_fighter": [],
+        "b_kd": [],
+        "b_sig_str": [],
+        "b_total_str": [],
+        "b_td": [],
+        "b_sub_att": [],
+        "b_rev": [],
+        "b_ctrl": [],
         "b_head": [],
         "b_body": [],
         "b_leg": [],
@@ -126,7 +135,6 @@ def fight_detail():
     })
 
     try:
-        i = 0
         with open('../files/fight_links.txt', 'r') as fight_file:
             date = ""
             for fight_index, fight_detail_url in enumerate(fight_file):

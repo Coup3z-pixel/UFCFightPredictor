@@ -1,8 +1,7 @@
 import pandas as pd
 
 def processing_data():
-    fight_df = pd.DataFrame({
-    })
+    fight_df = pd.read_csv('../dataset/cleaned_fight_details.csv')
 
     fighter_df = pd.DataFrame({
     })
