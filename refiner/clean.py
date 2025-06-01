@@ -8,9 +8,9 @@ def clean_data():
 
     cleaned_fight_details = pd.DataFrame(
             index=np.arange(0,len(fight_details)), 
-            columns=["date","referee","rounds","total_time","time_format","r_win","r_fighter","b_fighter","r_kd","r_sig_str","r_str_hit","r_sig_str_%","r_str_land","r_str_atmpt","r_str_land_%","r_td_atmp","r_td_succ","r_td-%","r_sub_att","r_rev","r_ctrl","r_head_hit","r_head_land","r_head_accuracy","r_body_hit","r_body_atmpt","r_body_accuracy","r_leg_hit","r_leg_land","r_leg_accuracy","r_distance_hit","r_distance_land","r_distance_accuracy","r_clinch_hit","r_clinch_land","r_clinch_accuracy","r_ground_hit","r_ground_land","r_clinch_accuracy","r_sig_str","r_str_hit","r_sig_str_%","r_str_land","r_str_atmpt","r_str_land_%","r_td_atmp","r_td_succ","r_td-%","r_sub_att","r_rev","r_ctrl","r_head_hit","r_head_land","r_head_accuracy","r_body_hit","r_body_atmpt","r_body_accuracy","r_leg_hit","r_leg_land","r_leg_accuracy","r_distance_hit","r_distance_land","r_distance_accuracy","r_clinch_hit","r_clinch_land","r_clinch_accuracy","r_ground_hit","r_ground_land","r_clinch_accuracy"]
+            columns=["date","referee","rounds","total_time","time_format","r_win","r_fighter","b_fighter","r_kd","r_sig_str","r_str_hit","r_sig_str_%","r_str_land","r_str_atmpt","r_str_land_%","r_td_atmp","r_td_succ","r_td-%","r_sub_att","r_rev","r_ctrl","r_head_hit","r_head_land","r_head_accuracy","r_body_hit","r_body_atmpt","r_body_accuracy","r_leg_hit","r_leg_land","r_leg_accuracy","r_distance_hit","r_distance_land","r_distance_accuracy","r_clinch_hit","r_clinch_land","r_clinch_accuracy","r_ground_hit","r_ground_land","r_ground_accuracy","b_sig_str","b_str_hit","b_sig_str_%","b_str_land","b_str_atmpt","b_str_land_%","b_td_atmp","b_td_succ","b_td-%","b_sub_att","b_rev","b_ctrl","b_head_hit","b_head_land","b_head_accuracy","b_body_hit","b_body_atmpt","b_body_accuracy","b_leg_hit","b_leg_land","b_leg_accuracy","b_distance_hit","b_distance_land","b_distance_accuracy","b_clinch_hit","b_clinch_land","b_clinch_accuracy","b_ground_hit","b_ground_land","b_ground_accuracy"]
         )
- 
+  
     for index, row in enumerate(fight_details.itertuples(index=False)): 
         print(row)
         r_sig_str_of_hit = split_by_of(row[9])
@@ -31,7 +31,6 @@ def clean_data():
         b_sig_str_of_distance = split_by_of(row[32])
         b_sig_str_of_clinch = split_by_of(row[33])
         b_sig_str_of_ground = split_by_of(row[34])
-
         
         cleaned_fight_details.loc[index] = np.array([
                 row[0],
@@ -105,10 +104,9 @@ def clean_data():
                 0 if int(b_sig_str_of_ground[1]) == 0 else int(b_sig_str_of_ground[0]) / int(b_sig_str_of_ground[1]),
         ], dtype=object)
 
-    print("Clean data")
-    print(fight_details)
-    print(cleaned_fight_details)
-    cleaned_fight_details.to_csv('../dataset/cleaned_fight_details.csv')
+    cleaned_fight_details["date"] = pd.to_datetime(cleaned_fight_details['date'])
+    cleaned_fight_details = cleaned_fight_details.sort_values(by='date')
+    cleaned_fight_details.to_csv('../dataset/cleaned_fight_details.csv', index=False)
 
 if __name__ == "__main__":
     clean_data()
