@@ -24,9 +24,13 @@ def processing_data():
 
     try:
         # go through fight_df chronologically
-        for row in fight_df.itertuples():
-            # process
-            print(row)
+        for index, row in enumerate(fight_df.itertuples()):
+            # compute the stat for each fighter
+
+            # combine the results of each fighter into the train data
+
+            # append the result row onto train_df
+
     finally: 
         train_df.to_csv('../dataset/train.csv')
 
