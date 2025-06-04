@@ -5,7 +5,7 @@ from lxml import etree
 
 
 def scrape_fighter():
-    fighter_details_df = pd.DataFrame(columns=['name','weight', 'reach', 'stance'])
+    fighter_details_df = pd.DataFrame(columns=['name','height','weight', 'reach', 'stance'])
 
     try:
         for character in string.ascii_lowercase:
@@ -14,12 +14,18 @@ def scrape_fighter():
 
             tr = html_page.xpath('//tr')
             for row in tr:
+                if not row.xpath('td[1]/a'):
+                    continue
+
+                height = row.xpath('td[4]')[0].text.strip('\n ')
+
                 fighter_details_df.loc[len(fighter_details_df)] = [
-                        row.xpath('td[1]/a')
-                ]
-                print(row.xpath('td[1]/a'))
-
-
+                        f"{row.xpath('td[1]/a')[0].text} {row.xpath('td[2]/a')[0].text}",
+                        -1 if height == '--' else int(height[0]) * 12 + int(height[height.index(' '):height.index('"')]),
+                        row.xpath('td[5]')[0].text.strip('\n lbs')[:3],
+                        row.xpath('td[6]')[0].text.strip('\n ')[:2],
+                        row.xpath('td[7]')[0].text.strip('\n ')
+                       ]
     finally:
         fighter_details_df.to_csv('../dataset/fighter_details.csv')
 
